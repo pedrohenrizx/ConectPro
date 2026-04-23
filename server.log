@@ -1,0 +1,25 @@
+[Thu Apr 23 23:26:45 2026] PHP 8.3.6 Development Server (http://localhost:8000) started
+[Thu Apr 23 23:27:13 2026] [::1]:36998 Accepted
+[Thu Apr 23 23:27:13 2026] [::1]:36998 [200]: GET /
+[Thu Apr 23 23:27:13 2026] [::1]:36998 Closing
+[Thu Apr 23 23:27:13 2026] [::1]:37006 Accepted
+[Thu Apr 23 23:27:13 2026] [::1]:37020 Accepted
+[Thu Apr 23 23:27:13 2026] [::1]:37024 Accepted
+[Thu Apr 23 23:27:13 2026] [::1]:37006 [200]: GET /assets/js/feed.js
+[Thu Apr 23 23:27:13 2026] [::1]:37020 [200]: GET /assets/js/theme.js
+[Thu Apr 23 23:27:13 2026] [::1]:37006 Closing
+[Thu Apr 23 23:27:13 2026] [::1]:37024 [200]: GET /assets/js/parse-init.js
+[Thu Apr 23 23:27:13 2026] [::1]:37020 Closing
+[Thu Apr 23 23:27:13 2026] [::1]:37024 Closing
+[Thu Apr 23 23:27:15 2026] [::1]:37032 Accepted
+[Thu Apr 23 23:27:15 2026] [::1]:37032 [200]: GET /auth.php
+[Thu Apr 23 23:27:15 2026] [::1]:37032 Closing
+[Thu Apr 23 23:27:15 2026] [::1]:37040 Accepted
+[Thu Apr 23 23:27:15 2026] [::1]:37042 Accepted
+[Thu Apr 23 23:27:15 2026] [::1]:37056 Accepted
+[Thu Apr 23 23:27:15 2026] [::1]:37040 [200]: GET /assets/js/auth.js
+[Thu Apr 23 23:27:15 2026] [::1]:37042 [200]: GET /assets/js/theme.js
+[Thu Apr 23 23:27:15 2026] [::1]:37056 [200]: GET /assets/js/parse-init.js
+[Thu Apr 23 23:27:15 2026] [::1]:37040 Closing
+[Thu Apr 23 23:27:15 2026] [::1]:37042 Closing
+[Thu Apr 23 23:27:15 2026] [::1]:37056 Closing
