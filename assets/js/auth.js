@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // If user is already logged in, redirect to index
     if (Parse.User.current()) {
-        window.location.href = 'index.php';
+        window.location.href = '/';
         return;
     }
 
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const user = await Parse.User.logIn(email, password);
-            window.location.href = 'index.php';
+            window.location.href = '/';
         } catch (error) {
             errorDiv.textContent = 'Erro ao fazer login: ' + error.message;
             errorDiv.classList.remove('hidden');
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             await user.signUp();
-            window.location.href = 'index.php';
+            window.location.href = '/';
         } catch (error) {
             errorDiv.textContent = 'Erro ao cadastrar: ' + error.message;
             errorDiv.classList.remove('hidden');

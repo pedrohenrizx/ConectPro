@@ -1,68 +1,47 @@
-<?php include 'header.php'; ?>
+<?php
+// Front Controller
 
-<!-- Create Post Area -->
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
-    <h3 class="text-lg font-semibold mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Criar nova postagem</h3>
+// For PHP built-in server (used in local testing)
+// If the requested file is a static asset (like css, js, images), serve it directly.
+if (php_sapi_name() === 'cli-server') {
+    $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+    $ext = pathinfo($path, PATHINFO_EXTENSION);
+    if (in_array($ext, ['css', 'js', 'jpg', 'jpeg', 'png', 'gif', 'svg', 'woff', 'woff2', 'ttf'])) {
+        return false; // Let the built-in server handle the static file
+    }
+}
 
-    <form id="create-post-form" class="space-y-4">
-        <!-- Post Content -->
-        <div>
-            <textarea id="post-content" rows="3" placeholder="No que você está pensando?" class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-primary focus:border-primary resize-none"></textarea>
-        </div>
+// Get the requested URL path
+$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$basePath = ''; // Adjust if deploying to a subdirectory, e.g., '/devconnect'
+$route = str_replace($basePath, '', $requestUri);
 
-        <!-- Post Image -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Imagem (Opcional)</label>
-            <input type="file" id="post-image" accept="image/*" class="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-secondary transition">
-        </div>
-
-        <!-- Post Code toggle -->
-        <div>
-            <button type="button" id="toggle-code-btn" class="text-sm text-primary hover:text-secondary transition flex items-center gap-1">
-                <i class="fa-solid fa-code"></i> Adicionar trecho de código
-            </button>
-
-            <div id="code-container" class="mt-2 hidden">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Linguagem</label>
-                <select id="code-language" class="mb-2 block w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
-                    <option value="javascript">JavaScript</option>
-                    <option value="python">Python</option>
-                    <option value="htmlmixed">HTML</option>
-                    <option value="css">CSS</option>
-                    <option value="php">PHP</option>
-                </select>
-                <textarea id="post-code" name="post-code"></textarea>
-            </div>
-        </div>
-
-        <div class="flex justify-end pt-2">
-            <button type="submit" id="submit-post-btn" class="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-md transition font-medium flex items-center gap-2">
-                <i class="fa-solid fa-paper-plane"></i> Publicar
-            </button>
-        </div>
-    </form>
-</div>
-
-<!-- Feed Area -->
-<div id="feed-container" class="space-y-6">
-    <!-- Posts will be injected here dynamically -->
-    <div class="text-center py-8">
-        <i class="fa-solid fa-spinner fa-spin text-3xl text-primary mb-2"></i>
-        <p class="text-gray-500 dark:text-gray-400">Carregando feed...</p>
-    </div>
-</div>
-
-<!-- CodeMirror Scripts for syntax highlighting -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/clike/clike.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/php/php.min.js"></script>
-
-<!-- Feed Logic -->
-<script src="assets/js/feed.js"></script>
-
-<?php include 'footer.php'; ?>
+// Define Routes
+switch ($route) {
+    case '/':
+    case '/home':
+    case '/index':
+        require __DIR__ . '/pages/home.php';
+        break;
+    case '/auth':
+    case '/login':
+    case '/register':
+        require __DIR__ . '/pages/auth.php';
+        break;
+    case '/profile':
+        require __DIR__ . '/pages/profile.php';
+        break;
+    case '/groups':
+        require __DIR__ . '/pages/groups.php';
+        break;
+    case '/messages':
+        require __DIR__ . '/pages/messages.php';
+        break;
+    default:
+        // 404 Page Not Found
+        http_response_code(404);
+        require __DIR__ . '/header.php';
+        echo '<div class="text-center py-20"><h1 class="text-4xl font-bold text-gray-800 dark:text-gray-200">404 - Página não encontrada</h1><p class="mt-4 text-gray-600 dark:text-gray-400">A URL solicitada não existe nesta plataforma.</p><a href="/" class="mt-6 inline-block bg-primary hover:bg-secondary text-white px-6 py-2 rounded-md transition">Voltar ao Início</a></div>';
+        require __DIR__ . '/footer.php';
+        break;
+}

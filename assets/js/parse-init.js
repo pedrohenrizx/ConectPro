@@ -33,8 +33,8 @@ function checkAuth() {
         if(unauthNavLinks) unauthNavLinks.classList.remove('hidden');
 
         // If not on auth page, redirect to auth
-        if (!window.location.pathname.endsWith('auth.php')) {
-            window.location.href = 'auth.php';
+        if (!window.location.pathname.endsWith('/auth') && !window.location.pathname.endsWith('/register') && !window.location.pathname.endsWith('/login')) {
+            window.location.href = '/auth';
         }
     }
 }
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         logoutBtn.addEventListener('click', async () => {
             try {
                 await Parse.User.logOut();
-                window.location.href = 'auth.php';
+                window.location.href = '/auth';
             } catch (error) {
                 console.error("Error logging out", error);
                 alert("Erro ao sair: " + error.message);
