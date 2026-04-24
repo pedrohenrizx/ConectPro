@@ -4,14 +4,19 @@
     <!-- Groups List Sidebar -->
     <div class="w-full md:w-1/3">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sticky top-24">
-            <div class="flex justify-between items-center mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+            <div class="flex justify-between items-center mb-2 border-b border-gray-200 dark:border-gray-700 pb-2">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Grupos</h3>
                 <button id="create-group-btn" class="text-primary hover:text-secondary transition text-sm flex items-center gap-1">
                     <i class="fa-solid fa-plus"></i> Criar
                 </button>
             </div>
 
-            <div id="groups-list" class="space-y-2">
+            <!-- 19. Group Search -->
+            <div class="mb-4">
+                <input type="text" id="group-search" placeholder="Buscar grupo..." class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-1 focus:ring-primary text-sm">
+            </div>
+
+            <div id="groups-list" class="space-y-2 max-h-[60vh] overflow-y-auto pr-1">
                 <!-- Group list injected here -->
                 <div class="text-center py-4">
                     <i class="fa-solid fa-spinner fa-spin text-primary"></i>
@@ -27,9 +32,13 @@
                 <div>
                     <h2 id="current-group-name" class="text-2xl font-bold text-gray-800 dark:text-gray-200">Nome do Grupo</h2>
                     <p id="current-group-desc" class="text-gray-500 dark:text-gray-400 mt-1">Descrição do grupo.</p>
+                    <!-- 20. Group Member Count -->
+                    <p id="group-member-count" class="text-xs text-primary mt-2 flex items-center gap-1"><i class="fa-solid fa-users"></i> <span>0 membros</span></p>
                 </div>
-                <button id="join-group-btn" class="px-4 py-2 bg-primary hover:bg-secondary text-white rounded-md transition text-sm hidden">Participar</button>
-                <span id="member-badge" class="px-3 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 rounded-full text-xs font-medium hidden">Membro</span>
+                <div class="flex flex-col items-end gap-2">
+                    <button id="join-group-btn" class="px-4 py-2 bg-primary hover:bg-secondary text-white rounded-md transition text-sm hidden">Participar</button>
+                    <span id="member-badge" class="px-3 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 rounded-full text-xs font-medium hidden">Membro</span>
+                </div>
             </div>
 
             <!-- Create Discussion Form (Only for members) -->

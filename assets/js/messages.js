@@ -41,13 +41,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 const initial = name.charAt(0).toUpperCase();
 
                 const btn = document.createElement('button');
-                btn.className = 'w-full flex items-center gap-3 p-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition border-b border-gray-100 dark:border-gray-800 text-left';
+                // 24. User List Styling
+                btn.className = 'w-full flex items-center gap-3 p-3 hover:bg-gray-200 dark:hover:bg-gray-800 cursor-pointer transition-colors duration-200 border-b border-gray-100 dark:border-gray-800 text-left group';
                 btn.innerHTML = `
-                    <div class="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-white font-bold flex-shrink-0">
+                    <div class="w-10 h-10 rounded-full bg-secondary group-hover:scale-105 transition-transform flex items-center justify-center text-white font-bold flex-shrink-0 shadow-sm">
                         ${escapeHTML(initial)}
                     </div>
                     <div class="overflow-hidden">
-                        <p class="font-semibold text-gray-800 dark:text-gray-200 truncate">${escapeHTML(name)}</p>
+                        <p class="font-semibold text-gray-800 dark:text-gray-200 truncate group-hover:text-primary transition-colors">${escapeHTML(name)}</p>
                     </div>
                 `;
 
@@ -110,7 +111,14 @@ document.addEventListener('DOMContentLoaded', () => {
             messagesList.innerHTML = '';
 
             if (results.length === 0) {
-                messagesList.innerHTML = '<p class="text-center text-gray-500 text-sm py-4">Nenhuma mensagem ainda. Envie um "Olá"!</p>';
+                // 25. Message Empty State
+                messagesList.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-full text-center opacity-70">
+                        <div class="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mb-3">
+                            <i class="fa-solid fa-hand-wave text-3xl text-gray-400 dark:text-gray-500"></i>
+                        </div>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">Diga olá para iniciar a conversa!</p>
+                    </div>`;
                 return;
             }
 
@@ -118,23 +126,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 const senderId = msg.get("sender").id;
                 const isMine = senderId === currentUser.id;
                 const content = msg.get("content");
-                const time = msg.createdAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
                 const msgDiv = document.createElement('div');
                 msgDiv.className = `flex ${isMine ? 'justify-end' : 'justify-start'}`;
 
                 msgDiv.innerHTML = `
                     <div class="max-w-[70%] rounded-lg px-4 py-2 ${isMine ? 'bg-primary text-white rounded-br-none' : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-bl-none'} shadow-sm">
-                        <p class="text-sm whitespace-pre-wrap">${escapeHTML(content)}</p>
-                        <p class="text-[10px] ${isMine ? 'text-blue-200' : 'text-gray-400'} text-right mt-1">${escapeHTML(time)}</p>
+                        <div class="text-sm whitespace-pre-wrap break-words">${parseContent(content)}</div>
+                        <p class="text-[10px] ${isMine ? 'text-blue-200' : 'text-gray-400'} text-right mt-1" title="${escapeHTML(msg.createdAt.toLocaleString('pt-BR'))}">${escapeHTML(timeAgo(msg.createdAt))}</p>
                     </div>
                 `;
 
                 messagesList.appendChild(msgDiv);
             });
 
-            // Scroll to bottom
-            messagesList.scrollTop = messagesList.scrollHeight;
+            // 23. Message Smooth Scroll
+            messagesList.scrollTo({
+                top: messagesList.scrollHeight,
+                behavior: 'smooth'
+            });
 
         } catch (error) {
             console.error("Error loading messages:", error);
@@ -142,9 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Send Message
-    sendMessageForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
+    async function sendMessage() {
         if (!selectedUser) return;
 
         const content = messageInput.value.trim();
@@ -164,6 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
             await msg.save();
 
             messageInput.value = '';
+            messageInput.style.height = 'auto'; // Reset auto resize
             await loadMessages(); // Reload to show new message
         } catch (error) {
             console.error("Error sending message:", error);
@@ -172,6 +181,19 @@ document.addEventListener('DOMContentLoaded', () => {
             sendBtn.disabled = false;
             messageInput.disabled = false;
             messageInput.focus();
+        }
+    }
+
+    sendMessageForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await sendMessage();
+    });
+
+    // 22. Message Enter to Send
+    messageInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault(); // Prevent default new line
+            sendMessage();
         }
     });
 

@@ -40,12 +40,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById('login-password').value;
         const errorDiv = document.getElementById('login-error');
 
+        // 10. & 11. Auth Loading State and Prevent Double Submit
+        const submitBtn = formLogin.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Entrando...';
+
         try {
             const user = await Parse.User.logIn(email, password);
             window.location.href = '/';
         } catch (error) {
             errorDiv.textContent = 'Erro ao fazer login: ' + error.message;
             errorDiv.classList.remove('hidden');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Entrar';
         }
     });
 
@@ -57,11 +64,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById('register-password').value;
         const errorDiv = document.getElementById('register-error');
 
+        // 10. & 11. Auth Loading State and Prevent Double Submit
+        const submitBtn = formRegister.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Cadastrando...';
+
         const user = new Parse.User();
         user.set("username", email); // Using email as username for simplicity
         user.set("email", email);
         user.set("password", password);
-        user.set("name", name);
+        user.set("name", toTitleCase(name));
 
         try {
             await user.signUp();
@@ -69,6 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             errorDiv.textContent = 'Erro ao cadastrar: ' + error.message;
             errorDiv.classList.remove('hidden');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Cadastrar';
         }
     });
 });

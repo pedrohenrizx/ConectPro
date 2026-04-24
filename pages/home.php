@@ -14,6 +14,11 @@
         <div>
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Imagem (Opcional)</label>
             <input type="file" id="post-image" accept="image/*" class="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-secondary transition">
+            <!-- 14. Image Preview -->
+            <div id="image-preview-container" class="mt-2 hidden relative w-fit">
+                <img id="image-preview" src="" alt="Preview" class="h-32 object-cover rounded-md border border-gray-300 dark:border-gray-600">
+                <button type="button" id="remove-image-btn" class="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs shadow-md transition"><i class="fa-solid fa-times"></i></button>
+            </div>
         </div>
 
         <!-- Post Code toggle -->
@@ -35,8 +40,11 @@
             </div>
         </div>
 
-        <div class="flex justify-end pt-2">
-            <button type="submit" id="submit-post-btn" class="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-md transition font-medium flex items-center gap-2">
+        <div class="flex justify-between items-center pt-2">
+            <!-- 12. Post Character Count -->
+            <span id="char-count" class="text-xs text-gray-500">0 caracteres</span>
+
+            <button type="submit" id="submit-post-btn" class="bg-primary hover:bg-secondary disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-6 py-2 rounded-md transition font-medium flex items-center gap-2" disabled>
                 <i class="fa-solid fa-paper-plane"></i> Publicar
             </button>
         </div>

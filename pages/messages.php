@@ -45,9 +45,9 @@
 
         <!-- Message Input Form -->
         <div class="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-            <form id="send-message-form" class="flex gap-2">
-                <input type="text" id="message-input" required placeholder="Digite uma mensagem..." class="flex-grow px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-full focus:outline-none focus:ring-primary focus:border-primary">
-                <button type="submit" id="send-message-btn" class="bg-primary hover:bg-secondary text-white w-10 h-10 rounded-full flex items-center justify-center transition">
+            <form id="send-message-form" class="flex items-end gap-2">
+                <textarea id="message-input" rows="1" required placeholder="Digite uma mensagem... (Enter para enviar, Shift+Enter para nova linha)" class="flex-grow px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-2xl focus:outline-none focus:ring-primary focus:border-primary resize-none overflow-hidden" style="min-height: 40px; max-height: 120px;"></textarea>
+                <button type="submit" id="send-message-btn" class="bg-primary hover:bg-secondary text-white w-10 h-10 rounded-full flex items-center justify-center transition flex-shrink-0">
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </form>

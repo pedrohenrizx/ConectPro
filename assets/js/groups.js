@@ -6,9 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const groupsListEl = document.getElementById('groups-list');
     const groupContentArea = document.getElementById('group-content-area');
     const noGroupSelected = document.getElementById('no-group-selected');
+    const groupSearchInput = document.getElementById('group-search');
 
     const currentGroupName = document.getElementById('current-group-name');
     const currentGroupDesc = document.getElementById('current-group-desc');
+    const groupMemberCount = document.getElementById('group-member-count');
     const joinGroupBtn = document.getElementById('join-group-btn');
     const memberBadge = document.getElementById('member-badge');
 
@@ -26,10 +28,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentGroup = null;
 
     // Load Groups
-    async function loadGroups() {
+    async function loadGroups(searchQuery = '') {
         try {
             const Group = Parse.Object.extend("Group");
             const query = new Parse.Query(Group);
+            if (searchQuery) {
+                query.matches("name", new RegExp(searchQuery, 'i'));
+            }
             query.ascending("name");
             const results = await query.find();
 
@@ -54,6 +59,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    if (groupSearchInput) {
+        groupSearchInput.addEventListener('input', (e) => {
+            loadGroups(e.target.value.trim());
+        });
+    }
+
     // Select Group
     async function selectGroup(group) {
         currentGroup = group;
@@ -72,6 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
     async function checkMembership() {
         const members = currentGroup.get("members") || [];
         const isMember = members.some(userId => userId === currentUser.id);
+
+        // 20. Update Member Count
+        groupMemberCount.innerHTML = `<i class="fa-solid fa-users"></i> <span>${members.length} ${members.length === 1 ? 'membro' : 'membros'}</span>`;
 
         if (isMember) {
             joinGroupBtn.classList.add('hidden');
@@ -125,28 +139,33 @@ document.addEventListener('DOMContentLoaded', () => {
             discussionsList.innerHTML = '';
 
             if (results.length === 0) {
-                discussionsList.innerHTML = '<p class="text-center text-gray-500 py-4">Nenhuma discussão ainda. Seja o primeiro!</p>';
+                // 21. Group Empty State
+                discussionsList.innerHTML = `
+                    <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-8 text-center border border-dashed border-gray-300 dark:border-gray-600 mt-4">
+                        <i class="fa-regular fa-comments text-4xl text-gray-400 dark:text-gray-500 mb-3"></i>
+                        <h4 class="text-lg font-medium text-gray-700 dark:text-gray-300">Nenhuma discussão ainda</h4>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Seja o primeiro a iniciar um tópico neste grupo!</p>
+                    </div>`;
                 return;
             }
 
             results.forEach(discussion => {
                 const author = discussion.get("author");
                 const content = discussion.get("content");
-                const createdAt = discussion.createdAt.toLocaleString('pt-BR');
                 const authorName = author ? (author.get("name") || author.get("username")) : "Usuário Desconhecido";
 
                 const html = `
-                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-md border border-gray-200 dark:border-gray-600">
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-md border border-gray-200 dark:border-gray-600 shadow-sm transition hover:shadow-md">
                         <div class="flex items-center gap-2 mb-2">
                             <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-white text-xs font-bold">
                                 ${escapeHTML(authorName.charAt(0).toUpperCase())}
                             </div>
                             <div>
                                 <p class="text-sm font-semibold text-gray-800 dark:text-gray-200">${escapeHTML(authorName)}</p>
-                                <p class="text-xs text-gray-500">${escapeHTML(createdAt)}</p>
+                                <p class="text-[10px] text-gray-500" title="${escapeHTML(discussion.createdAt.toLocaleString('pt-BR'))}">${escapeHTML(timeAgo(discussion.createdAt))}</p>
                             </div>
                         </div>
-                        <p class="text-gray-700 dark:text-gray-300 whitespace-pre-wrap text-sm">${escapeHTML(content)}</p>
+                        <div class="text-gray-700 dark:text-gray-300 whitespace-pre-wrap text-sm">${parseContent(content)}</div>
                     </div>
                 `;
 
